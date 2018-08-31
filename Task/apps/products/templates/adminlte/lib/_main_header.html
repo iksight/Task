@@ -1,0 +1,33 @@
+{% extends 'adminlte/lib/_main_header.html' %}
+{% load adminlte_helpers i18n %}
+
+{% block logo %}
+    <a href="{% block logo_href %}/{% endblock %}" class="logo">
+        <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo-mini">{% block logo_text_small %}<b>T</b>{% endblock %}</span>
+        <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg">{% block logo_text %}<b>T</b>ASK{% endblock %}</span>
+    </a>
+{% endblock %}
+
+{% block user_header %}
+    <li class="user-header">
+        <img src="{% avatar_url size=180 %}" class="img-circle" alt="User Image">
+        <p>
+            {% firstof request.user.get_short_name request.user.get_username %}
+            <small>{% trans "Member since" %} {{ request.user.date_joined }}</small>
+        </p>
+    </li>
+{% endblock %}
+
+{% block menu_footer %}
+    <li class="user-footer">
+        <div class="pull-left">
+            <a href="{% block change_password_url %}{% url 'account_change_password' %}{% endblock %}"
+               class="btn btn-default btn-flat">{% trans 'Change password' %}</a>
+        </div>
+        <div class="pull-right">
+            <a href="{% block logout_url %}{% logout_url %}{% endblock %}" class="btn btn-default btn-flat">{% trans "Log out" %}</a>
+        </div>
+    </li>
+{% endblock %}

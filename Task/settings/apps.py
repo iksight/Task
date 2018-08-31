@@ -4,6 +4,14 @@ INSTALLED_APPS = [
     # user apps
     'Task.apps.products.apps.ProductsConfig',
 
+    # allauth
+    'django.contrib.sites',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+
     # adminlte2
     'django_adminlte',
     'django_adminlte_theme',

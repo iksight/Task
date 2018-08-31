@@ -4,6 +4,7 @@ include(
     'common.py',
     'apps.py',
     'database.py',
+    'allauth.py',
 
     scope=globals()
 )
