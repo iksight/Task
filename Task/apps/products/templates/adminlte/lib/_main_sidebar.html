@@ -1,0 +1,80 @@
+{% load adminlte_helpers %}
+{% load i18n %}
+<!-- Left side column. contains the sidebar -->
+<aside class="main-sidebar">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- Sidebar user panel -->
+        {% if request.user.is_authenticated %}
+            {% block user_panel %}
+            <div class="user-panel">
+                <div class="pull-left image">
+                    <img src="{% avatar_url size=90 %}" class="img-circle" alt="User Image">
+                </div>
+                <div class="pull-left info">
+                    <p>{% firstof request.user.get_full_name request.user.username %}</p>
+                </div>
+            </div>
+            {% endblock %}
+        {% endif %}
+
+        {% block form %}{% endblock %}
+
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+        {% block nav_links_ul %}
+        <ul class="sidebar-menu">
+            {% block nav_links_outer %}
+            <li class="header">{% block nav_heading %}MAIN NAVIGATION{% endblock %}</li>
+                {% block nav_links %}
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-address-card"></i> <span>{% blocktrans %}Account{% endblocktrans %}</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li>
+                                {% if request.user.is_authenticated %}
+                                    <a href="{% url 'account_logout' %}">
+                                        <i class="fa fa-user-times"></i>{% blocktrans %}Log out{% endblocktrans %}
+                                    </a>
+                                    <a href="{% url 'account_change_password' %}">
+                                        <i class="fa fa-pencil"></i>{% blocktrans %}Change password{% endblocktrans %}
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'account_login' %}">
+                                        <i class="fa fa-user"></i>{% blocktrans %}Log in{% endblocktrans %}
+                                    </a>
+                                    <a href="{% url 'account_signup' %}">
+                                        <i class="fa fa-user-plus"></i>{% blocktrans %}Sign Up{% endblocktrans %}
+                                    </a>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </li>
+                    {% if request.user.is_authenticated %}
+                        <li class="treeview">
+                            <a href="#">
+                                <i class="fa fa-book"></i> <span>{% blocktrans %}Products{% endblocktrans %}</span>
+                                <span class="pull-right-container">
+                                    <i class="fa fa-angle-left pull-right"></i>
+                                </span>
+                            </a>
+                            <ul class="treeview-menu">
+                                <li>
+                                    <a href="{% url 'product_table' %}">
+                                        <i class="fa fa-building"></i>{% blocktrans %}Product table{% endblocktrans %}
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% endif %}
+                    </li>
+                {% endblock nav_links %}
+            {% endblock nav_links_outer %}
+        </ul>
+        {% endblock nav_links_ul %}
+    </section>
+    <!-- /.sidebar -->
+</aside>

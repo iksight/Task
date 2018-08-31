@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block title %}TestTask | Products{% endblock %}
+
+{% block stylesheets %}
+    {% include 'adminlte/lib/_styles.html' %}
+    <style>
+        tfoot input {
+            width: 100%;
+            padding: 1px;
+            box-sizing: border-box;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+{% endblock %}
+
+{% block content %}
+    {% if products.count %}
+        <table id="table_products" class="display" style="width:100%">
+            <thead>
+                <tr>
+                    <th>ASIN</th>
+                    <th>Image</th>
+                    <th class="filter-column">Rating</th>
+                    <th>Price</th>
+                    <th>Title</th>
+                    <th>Available</th>
+                    <th class="filter-column">Amount</th>
+                    <th>Weight</th>
+                    <th>Length</th>
+                    <th>Width</th>
+                    <th>Height</th>
+                    <th class="filter-column">Changed date</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr>
+                    <th>ASIN</th>
+                    <th>Image</th>
+                    <th class="filter-column">Rating</th>
+                    <th>Price</th>
+                    <th>Title</th>
+                    <th>Available</th>
+                    <th class="filter-column">Amount</th>
+                    <th>Weight</th>
+                    <th>Length</th>
+                    <th>Width</th>
+                    <th>Height</th>
+                    <th class="filter-column">Changed date</th>
+                </tr>
+            </tfoot>
+        </table>
+    {% else %}
+        {% blocktrans %}<p>No saved products.</p>{% endblocktrans %}
+    {% endif %}
+{% endblock %}
+
+{% block javascript %}
+    {% include 'adminlte/lib/_scripts.html' %}
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <script type="text/javascript">
+        $(document).ready( function () {
+            // Setup - add a text input to each footer cell
+            $('#table_products tfoot th.filter-column').each( function () {
+                var title = $(this).text();
+                $(this).html( '<input type="text" placeholder="'+title+'" />' );
+            } );
+
+            var table = $('#table_products').DataTable({
+                "processing": true,
+                "ajax": {
+                    "processing": true,
+                    "url": "{% url 'product_as_json' %}",
+                    "dataSrc": "",
+                },
+                "columns": [
+                    {"data": "fields.asin"},
+                    {"data": "fields.image"},
+                    {"data": "fields.rating"},
+                    {"data": "fields.price"},
+                    {"data": "fields.title"},
+                    {"data": "fields.available"},
+                    {"data": "fields.amount"},
+                    {"data": "fields.weight"},
+                    {"data": "fields.length"},
+                    {"data": "fields.width"},
+                    {"data": "fields.height"},
+                    {"data": "fields.changed_date"},
+                ],
+                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                "dom": "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+                        "<'row'<'col-sm-12'tr>>" +
+                        "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Russian.json",
+                "scrollX": true,
+                }
+            });
+
+            // Apply the search
+            table.columns('.filter-column').every( function () {
+                var that = this;
+
+                $( 'input', this.footer() ).on( 'keyup change', function () {
+                    that
+                        .search( this.value )
+                        .draw();
+                } );
+            } );
+        } );
+    </script>
+{% endblock %}
