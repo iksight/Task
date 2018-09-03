@@ -5,6 +5,7 @@ include(
     'apps.py',
     'database.py',
     'allauth.py',
+    'email.py',
 
     scope=globals()
 )

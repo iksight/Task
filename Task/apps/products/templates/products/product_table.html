@@ -12,6 +12,14 @@
             padding: 1px;
             box-sizing: border-box;
         }
+
+        .fa-red {
+            color: red;
+        }
+
+        .fa-green {
+            color: green;
+        }
     </style>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
 {% endblock %}
@@ -90,6 +98,24 @@
                     {"data": "fields.height"},
                     {"data": "fields.changed_date"},
                 ],
+                "columnDefs": [
+                    {
+                        "targets": "_all",
+                        "className": "dt-left"
+                    },
+                    {
+                        "targets": 1,
+                        "render": function (url, type, row) {
+                            return '<img width="150px" height=auto src="' + url + '"/>';
+                        }
+                    },
+                    {
+                        "targets": 5,
+                        "render": function (avail, type, row) {
+                            return avail ? '<i class="fa fa-check fa-green" />' : '<i class="fa fa-close fa-red" />';
+                        }
+                    }
+                ],
                 "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                 "dom": "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
                         "<'row'<'col-sm-12'tr>>" +
@@ -102,10 +128,10 @@
 
             // Apply the search
             table.columns('.filter-column').every( function () {
-                var that = this;
+                var column = this;
 
                 $( 'input', this.footer() ).on( 'keyup change', function () {
-                    that
+                    column
                         .search( this.value )
                         .draw();
                 } );
